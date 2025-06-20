@@ -5,7 +5,7 @@ import io
 import base64
 import requests
 
-st.set_page_config(page_title="Menu+Influencer IA Adaptativa por Maria Castro", layout="centered")
+st.set_page_config(page_title="Menu+Influencer IA Adaptativa Maria castro", layout="centered")
 st.title("🧠 Imagen automática por producto + influencer")
 
 st.markdown("Sube una imagen de tu producto. Detectamos qué es y generamos una imagen profesional con IA, con o sin influencer.")
