@@ -55,7 +55,7 @@ if uploaded_file and openai_api_key:
                 )
 
                 chat_response = openai_client.chat.completions.create(
-                    model="gpt-4-vision-preview",
+                    model="gpt-4o",
                     messages=[
                         {"role": "user", "content": [
                             {"type": "text", "text": base_prompt},
