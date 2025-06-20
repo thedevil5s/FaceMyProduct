@@ -29,6 +29,8 @@ Una aplicación web creada con Streamlit que permite a los usuarios:
 - Una clave API de OpenAI con acceso a:
   - GPT-4 Vision (`gpt-4-vision-preview`)
   - DALL·E 3 (`dall-e-3`)
+  - openai>=1.0.0
+
 
 ## Instalación local
 
