@@ -18,12 +18,14 @@ uploaded_file = st.file_uploader('📷 Sube la imagen del producto (jpg/png)', t
 
 generation_type = st.radio('¿Qué deseas generar?', ['✨ Imagen mejorada del producto', '🤳 Imagen con avatar influencer'])
 
+avatar_prompts = {'Luna': 'A vertical 4K photo of a Colombian woman influencer with long straight black hair, medium skin tone, wearing a beige bomber jacket and jeans. She is in a cozy café with wooden furniture and brick walls, holding a creamy beverage in a clear cup with whipped cream. The scene is softly lit, Instagram-style, and naturally composed.', 'Nico': 'A vertical 4K image of a relaxed Colombian man with curly hair and medium brown skin, wearing a white t-shirt and linen pants. He is seated outdoors at a cozy café, holding a refreshing red fruit drink with lime in a clear plastic cup. The atmosphere is tropical, modern, and styled for social media.', 'Valentina': 'A high-resolution image of a blonde influencer woman with fair skin, wearing a white blazer and jeans. She is seated at a minimalistic café, holding a dessert drink or stylish coffee. Bright background, clean look, Instagram-friendly.', 'Chef Juan': 'A 4K image of a mature man with tanned skin and gray hair, wearing a chef coat, in a rustic kitchen setting. He is holding a pastry or a traditional item in a professional and friendly manner. Warm light and clean visual aesthetic.', 'Sofi': 'A vibrant image of a young teenage girl with pink streaks in her hair, light skin, and pastel-colored clothing. She is in a colorful café environment, holding a sweet treat or drink. The vibe is playful, influencer-style, with soft lighting.'}
+
 avatar_selected = None
 if generation_type == '🤳 Imagen con avatar influencer':
-    avatar_selected = st.selectbox('Selecciona un avatar influencer:', list(['Luna', 'Nico', 'Valentina', 'Chef Juan', 'Sofi']))
-    avatar_prompt = {'Luna': 'Create a 4K vertical image of a Colombian influencer with long straight black hair, medium skin tone, wearing a beige bomber jacket and jeans. She is smiling and holding the exact product from the reference photo with one or both hands, standing in a cozy café with wooden furniture and brick walls. Maintain realism and lighting style for Instagram.', 'Nico': 'Create a 4K vertical image of a young Colombian man with medium brown skin, curly hair, white t-shirt, and linen pants. He is seated in a rustic outdoor café, holding the exact product from the reference photo. Natural light, relaxed posture, influencer-style photo.', 'Valentina': 'Create a 4K vertical image of a blonde woman influencer with fair skin, wearing a white blazer and jeans, sitting in a clean minimal coffee shop, smiling while holding the same product from the original image. Bright background, natural aesthetic.', 'Chef Juan': 'Create a 4K vertical image of a mature man with gray hair and tan skin wearing a white chef coat, standing in a rustic kitchen while presenting the exact same product from the original photo. Studio light, professional chef posture.', 'Sofi': 'Create a 4K vertical image of a cheerful teenage girl with pink streaks in her hair and light skin, wearing pastel colors, smiling and holding the same product from the image. Background: candy café or colorful aesthetic. Fun, influencer style.'}[avatar_selected]
+    avatar_selected = st.selectbox('Selecciona un avatar influencer:', list(avatar_prompts.keys()))
+    final_prompt = avatar_prompts[avatar_selected]
 else:
-    avatar_prompt = '''Create a realistic professional image using the uploaded photo as reference. Preserve the exact shape, color, and details of the main product (e.g., bread, drink, dessert). Enhance the background and environment to match the product type: for bread use a warm wooden table and artisan bakery ambiance; for drinks, use café-style indoor lighting or a refreshing outdoor setup. Maintain clean aesthetics, soft shadows, natural light, and make the product stand out for advertising or menu use. Do not change the product’s identity. Format vertical, Instagram-ready.'''
+    final_prompt = '''Analyze the uploaded photo and generate a professional image of the same food item. Keep the product’s shape, size, texture, and color. Based on what type of item it is (bread, rice, dessert, drink, etc.), place it in a realistic and fitting environment: for bread, use warm wooden surfaces and bakery ambiance; for rice or meals, use ceramic plates and restaurant-style background; for drinks, use café settings. Natural light, soft shadows, vertical format. Do not alter the product itself.'''
 
 if uploaded_file and openai_api_key:
     image = Image.open(uploaded_file)
@@ -39,7 +41,7 @@ if uploaded_file and openai_api_key:
                     model='gpt-4o',
                     messages=[
                         {'role': 'user', 'content': [
-                            {'type': 'text', 'text': avatar_prompt},
+                            {'type': 'text', 'text': final_prompt},
                             {'type': 'image_url', 'image_url': {'url': f'data:image/jpeg;base64,{base64_image}'}}
                         ]}
                     ],
