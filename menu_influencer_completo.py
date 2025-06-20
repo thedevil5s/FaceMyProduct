@@ -5,7 +5,7 @@ import io
 import base64
 import requests
 
-st.set_page_config(page_title="Menu+Influencer IA Adaptativa Maria castro", layout="centered")
+st.set_page_config(page_title="Menu+Influencer IA Adaptativa", layout="centered")
 st.title("🧠 Imagen automática por producto + influencer")
 
 st.markdown("Sube una imagen de tu producto. Detectamos qué es y generamos una imagen profesional con IA, con o sin influencer.")
@@ -42,17 +42,12 @@ if uploaded_file and openai_api_key:
     if st.button("🎯 Generar imagen automática"):
         with st.spinner("Analizando imagen y generando..."):
             try:
-                # Pedimos a GPT que analice la imagen y complete los campos
                 response = openai_client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
                         {"role": "system", "content": "Eres un experto en fotografía de productos y publicidad. Tu tarea es analizar la imagen y completar las siguientes variables del prompt: product_type, surface_type, background_type y detalles visibles como toppings, color o forma."},
                         {"role": "user", "content": [
-                            {"type": "text", "text": "Analiza esta imagen y describe las siguientes variables:
-1. product_type
-2. surface_type
-3. background_type
-4. detalles"},
+                            {"type": "text", "text": "Analiza esta imagen y describe las siguientes variables:\n1. product_type\n2. surface_type\n3. background_type\n4. detalles"},
                             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
                         ]}
                     ],
@@ -62,17 +57,14 @@ if uploaded_file and openai_api_key:
 
                 avatar_prefix = avatar_prompts[avatar_selected] + " " if avatar_selected else ""
 
-                final_prompt = f"""
-{avatar_prefix}
+                final_prompt = f"""{avatar_prefix}
 Create a realistic professional photo of a {fields}.
 The item should retain its original shape, texture, and color.
 Use natural lighting, soft shadows, vertical framing.
-Photorealistic and suitable for Instagram or a digital menu.
-"""
+Photorealistic and suitable for Instagram or a digital menu."""
 
                 st.text_area("📄 Prompt generado:", value=final_prompt.strip(), height=250)
 
-                # Generar imagen
                 dalle_response = openai_client.images.generate(
                     model="dall-e-3",
                     prompt=final_prompt,
